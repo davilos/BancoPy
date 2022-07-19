@@ -15,7 +15,7 @@ def menu() -> None:
     print('\033[1;97m-='*40)
     print(" ATM ".center(80, '-'))
     print('-='*40)
-    print("Geek Bank".center(80, '-'))
+    print(" Geek Bank ".center(80, '-'))
     print('-=\033[m'*40)
 
     print('Seleciona uma opção no menu:')

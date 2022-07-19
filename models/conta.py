@@ -46,15 +46,55 @@ class Conta:
     def saldo_total(self) -> float:
         return self.__saldo_total
 
+    @saldo_total.setter
+    def saldo_total(self, valor: float) -> None:
+        self.__saldo_total = valor
+
     @property
     def _calcula_saldo_total(self) -> float:
         return self.saldo + self.limite
 
-    def depositar(self, valor: float) -> None:
-        pass
+    def depositar(self, valor_depositar: float) -> None:
+        if valor_depositar > 0:
+            self.saldo += valor_depositar
+            self.saldo_total = self._calcula_saldo_total
+            print('Depósito efetuado com sucesso!')
+        else:
+            print('\033[31mErro ao efetuar depósito. Tente novamente.\033[m')
 
-    def sacar(self, valor: float) -> None:
-        pass
+    def sacar(self, valor_sacar: float) -> None:
+        if 0 < valor_sacar <= self.saldo_total:
+            if self.saldo >= valor_sacar:
+                self.saldo -= valor_sacar
+                self.saldo_total = self._calcula_saldo_total
+            else:
+                restante_saque: float = self.saldo - valor_sacar
+                self.limite += restante_saque
+                self.saldo = 0
+                self.saldo_total = self._calcula_saldo_total
+            print('Saque efetuado com sucesso!')
+        else:
+            print('\033[31mErro ao efetuar saque. Tente novamente.\033[m')
 
-    def transferir(self, destino, valor: float) -> None:
-        pass
+    def transferir(self, destino, valor_transferir: float) -> None:
+        if 0 < valor_transferir <= self.saldo_total:
+            if self.saldo >= valor_transferir:
+                self.saldo -= valor_transferir
+                self.saldo_total = self._calcula_saldo_total
+                destino.saldo += valor_transferir
+                destino.saldo_total = destino._calcula_saldo_total
+            else:
+                restante_transferencia: float = self.saldo - valor_transferir
+                self.limite += restante_transferencia
+                self.saldo = 0
+                self.saldo_total = self._calcula_saldo_total
+                destino.saldo += valor_transferir
+                destino.saldo_total = destino._calcula_saldo_total
+            print(
+                f'Transferência para {destino.cliente.nome} '
+                'efetuada com sucesso!'
+            )
+        else:
+            print(
+                '\033[31mTransferência não realizada. Tente novamente!\033[m'
+            )
